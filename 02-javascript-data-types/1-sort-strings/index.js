@@ -11,12 +11,13 @@ export function sortStrings(arr, param = 'asc') {
     return;
   }
 
+  let sortProp = 1;
+  if (param === 'desc') sortProp = -1;
+
   const sortedArr = [...arr];
   sortedArr.sort( (str1, str2) => 
-    str1.localeCompare(str2, [ 'ru', 'en' ], { caseFirst: 'upper' }) 
+    sortProp * str1.localeCompare(str2, [ 'ru', 'en' ], { caseFirst: 'upper' }) 
   );
-
-  if (param === 'desc') return sortedArr.reverse();
 
   return sortedArr;
 }
