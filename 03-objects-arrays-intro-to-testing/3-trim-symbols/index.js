@@ -5,7 +5,6 @@
  * @returns {string} - the new string without extra symbols according passed size
  */
 export function trimSymbols(string, size) {
-  
   if (size === undefined) return string;
 
   let result = '';
@@ -15,12 +14,16 @@ export function trimSymbols(string, size) {
   for (let symbol of string) {
     if (symbol === currentSymbol) {
       counter++;
-      counter <= size ? result += symbol : result;
+      insertSymbol(symbol);
     } else {
       currentSymbol = symbol;
       counter = 1;
-      counter <= size ? result += symbol : result;
+      insertSymbol(symbol);
     }
+  }
+
+  function insertSymbol(symbol) {
+    counter <= size ? result += symbol : result;
   }
 
   return result;
