@@ -65,7 +65,11 @@ export default class ColumnChart {
   update(data = []) {
     this.data = data;
     this.elementColumns.innerHTML = this.getColumnProps(this.data);
-    if (!this.data.length) this.element.className = 'column-chart column-chart_loading';
+    if (!this.data.length) {
+      this.element.className = 'column-chart column-chart_loading';
+    } else {
+      this.element.className = 'column-chart';
+    }
   }
 
   remove() {
