@@ -28,15 +28,14 @@ export default class SortableTable {
     this.loadingData = false;
 
     this.render();
-    this.addEventListeners();
 
     this.controller = new AbortController();
     this.controllerSignal = this.controller.signal;
   }
 
-  async loadData() {
-    this.url.searchParams.set('_sort', this.sorted.id);
-    this.url.searchParams.set('_order', this.sorted.order);
+  async loadData(id = this.sorted.id, order = this.sorted.order) {
+    this.url.searchParams.set('_sort', id);
+    this.url.searchParams.set('_order', order);
     this.url.searchParams.set('_start', this.start);
     this.url.searchParams.set('_end', this.end);
 
@@ -57,6 +56,7 @@ export default class SortableTable {
     const data = await this.loadData();
 
     this.addedDataRows(data);
+    this.addEventListeners();
   }
 
   addedDataRows(data) {
@@ -112,7 +112,7 @@ export default class SortableTable {
     const dataOrder = item.sortable ? `data-order="${order}"` : '';
 
     return `
-      <div class="sortable-table__cell" data-id="${item.id}" data-sortable="${item.sortable}" ${dataOrder}">
+      <div class="sortable-table__cell" data-id="${item.id}" data-sortable="${item.sortable}" ${dataOrder}>
         <span>${item.title}</span>
         ${this.sorted.id === item.id
           ? `<span data-element="arrow" class="sortable-table__sort-arrow">
@@ -194,24 +194,24 @@ export default class SortableTable {
       }
 
       if (this.isSortLocally) {
-        this.sortOnClient();
+        this.sortOnClient(id, switchedOrder);
       } else {
-        this.sortOnServer();
+        this.sortOnServer(id, switchedOrder);
       }
     }
   }
 
-  sortOnClient() {
-    const sortedData = this.sortData(this.sorted.id, this.sorted.order);
+  sortOnClient(id, order) {
+    const sortedData = this.sortData(id, order);
     this.subElements.body.innerHTML = this.getTableBodyRows(sortedData);
   }
 
-  async sortOnServer() {
+  async sortOnServer(id, order) {
     this.start = 1;
     this.end = this.start + this.step;
-    const data = await this.loadData();
+    const sortedData = await this.loadData(id, order);
 
-    this.addedDataRows(data);
+    this.addedDataRows(sortedData);
   }
 
   sortData(field, order) {
