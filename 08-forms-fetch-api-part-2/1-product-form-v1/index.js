@@ -269,7 +269,7 @@ export default class ProductForm {
       result[name] = subElement;
     }
 
-    return result
+    return result;
   }
 
   remove () {
