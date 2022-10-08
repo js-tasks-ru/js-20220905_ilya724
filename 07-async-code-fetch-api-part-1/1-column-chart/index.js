@@ -67,12 +67,10 @@ export default class ColumnChart {
   }
 
   getHeaderProps(data) {
-    let sum = 0;
-    for (const value of Object.values(data)) {
-      sum += value;
-    }
+    const headerValue = Object.values(data).reduce((sum, value) => 
+      sum += value, 0);
 
-    return this.formatHeading(sum);
+    return this.formatHeading(headerValue);
   }
 
   getColumnProps(data) {
