@@ -28,11 +28,13 @@ export default class ProductForm {
   }
 
   addEventListeners() {
-    this.subElements.productForm.addEventListener('submit', this.submitHandler);
+    const { productForm, uploadImage, imageListContainer } = this.subElements;
 
-    this.subElements.uploadImage.addEventListener('click', this.uploadImageHandler);
+    productForm.addEventListener('submit', this.submitHandler);
 
-    this.subElements.imageListContainer.addEventListener('click', event => {
+    uploadImage.addEventListener('click', this.uploadImageHandler);
+
+    imageListContainer.addEventListener('click', event => {
       if ('deleteHandle' in event.target.dataset) {
         event.target.closest('li').remove();
       }
@@ -40,10 +42,8 @@ export default class ProductForm {
   }
 
   addDispatchEvent() {
-    const event = this.productId
-    ? new CustomEvent('product-updated')
-    : new CustomEvent('product-saved')
-
+    const eventType = this.productId ? 'product-updated' : 'product-saved';
+    const event = new CustomEvent(eventType);
     this.element.dispatchEvent(event);
   }
   

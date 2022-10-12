@@ -1,6 +1,7 @@
-import RangePicker from './components/range-picker/src/index.js';
-import SortableTable from './components/sortable-table/src/index.js';
-import ColumnChart from './components/column-chart/src/index.js';
+import RangePicker from '../../08-forms-fetch-api-part-2/2-range-picker/index.js';
+import SortableTable from '../../07-async-code-fetch-api-part-1/2-sortable-table-v3/index.js';
+import ColumnChart from '../../07-async-code-fetch-api-part-1/1-column-chart/index.js';
+import Tooltip from '../../06-events-practice/2-tooltip/index.js'
 import header from './bestsellers-header.js';
 
 import fetchJson from './utils/fetch-json.js';
@@ -24,14 +25,7 @@ export default class Page {
     `;
     document.body.querySelector('.main').append(loading);
 
-    this.url.searchParams.set('_start', '1');
-    this.url.searchParams.set('_end', '21');
-    this.url.searchParams.set('_sort', 'title');
-    this.url.searchParams.set('_order', 'asc');
-    this.url.searchParams.set('from', from.toISOString());
-    this.url.searchParams.set('to', to.toISOString());
-
-    const data = await fetchJson(this.url);
+    const data = await this.loadComponentsData(from, to);
 
     this.components.ordersChart.update(from, to);
     this.components.salesChart.update(from, to);
@@ -39,6 +33,17 @@ export default class Page {
     this.components.sortableTable.update(data);
 
     loading.remove();
+  }
+
+  async loadComponentsData(from, to) {
+    this.url.searchParams.set('_start', '1');
+    this.url.searchParams.set('_end', '21');
+    this.url.searchParams.set('_sort', 'title');
+    this.url.searchParams.set('_order', 'asc');
+    this.url.searchParams.set('from', from.toISOString());
+    this.url.searchParams.set('to', to.toISOString());
+
+    return await fetchJson(this.url);
   }
 
   getComponents() {
@@ -86,6 +91,8 @@ export default class Page {
       label: 'customers',
     })
 
+    const tooltip = new Tooltip();
+
     const sortableTable = new SortableTable(header, {
       url: `api/dashboard/bestsellers?_start=1&_end=20&from=${from.toISOString()}&to=${to.toISOString()}`,
       isSortLocally: true
@@ -96,7 +103,13 @@ export default class Page {
     this.components.salesChart = salesChart;
     this.components.customersChart = customersChart;
     this.components.sortableTable = sortableTable;
-    
+    this.insertComponents();
+
+    this.components.tooltip = tooltip;
+    tooltip.initialize();
+  }
+
+  insertComponents() {
     for (const component in this.components) {
       const subElement = this.subElements[component];
       const { element } = this.components[component];
