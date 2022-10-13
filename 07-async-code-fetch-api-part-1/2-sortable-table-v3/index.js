@@ -33,6 +33,11 @@ export default class SortableTable {
     this.controllerSignal = this.controller.signal;
   }
 
+  update(data) {
+    this.data = data;
+    this.addedDataRows(data);
+  }
+
   async loadData(id = this.sorted.id, order = this.sorted.order) {
     this.url.searchParams.set('_sort', id);
     this.url.searchParams.set('_order', order);

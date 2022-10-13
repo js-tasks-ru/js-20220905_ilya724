@@ -2,8 +2,9 @@
 
 /* Styles for components  */
 /* components */
-@import url("../components/sortable-table/src/style.css");
-@import url("../components/range-picker/src/style.css");
-@import url("../components/column-chart/src/style.css");
+@import url("../../../08-forms-fetch-api-part-2/2-range-picker/style.css");
+@import url("../../../07-async-code-fetch-api-part-1/2-sortable-table-v3/style.css");
+@import url("../../../07-async-code-fetch-api-part-1/1-column-chart/style.css");
+@import url("../../../06-events-practice/2-tooltip/style.css");
 
 
